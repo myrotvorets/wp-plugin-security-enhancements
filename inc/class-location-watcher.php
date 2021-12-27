@@ -13,12 +13,21 @@ final class Location_Watcher {
 
 	public const USER_META_KEY = 'psb_lw';
 
+	private string $ip = '';
+	/** @psalm-var GeolocateResponse|null|false */
+	private $location = false;
+
 	private function __construct() {
 		$this->init();
 	}
 
 	public function init(): void {
-		add_action( 'wp_login', [ $this, 'wp_login' ], 10, 2 );
+		$ip_address = Utils::get_ip();
+		if ( $ip_address ) {
+			$this->ip = $ip_address;
+			add_action( 'wp_login', [ $this, 'wp_login' ], 10, 2 );
+			add_filter( 'attach_session_information', [ $this, 'attach_session_information' ] );
+		}
 	}
 
 	/**
@@ -30,27 +39,41 @@ final class Location_Watcher {
 			return;
 		}
 
-		$ip = Utils::get_ip();
-		if ( ! $ip ) {
+		if ( apply_filters( 'psb_is_whitelisted_ip', false, $this->ip ) ) {
 			return;
 		}
 
-		if ( apply_filters( 'psb_is_whitelisted_ip', false, $ip ) ) {
-			return;
+		if ( false === $this->location ) {
+			$this->location = IP_API::geolocate( $this->ip );
 		}
 
-		$location = IP_API::geolocate( $ip );
-		if ( ! $location ) {
-			$message = sprintf( 'Sign-on to %1$s by %3$s from an unknown new location: IP: %2$s', home_url(), $ip, $user->user_login );
+		if ( ! $this->location ) {
+			$message = sprintf( 'Sign-on to %1$s by %3$s from an unknown new location: IP: %2$s', home_url(), $this->ip, $user->user_login );
 			Utils::log( 'wp-location-watcher', LOG_AUTH, LOG_WARNING, $message );
 			return;
 		}
 
-		if ( ! $this->check_meta( $user->ID, $location ) ) {
-			$this->send_notification( $user, $location );
-			$message = sprintf( 'Sign-on to %1$s by %4$s from a new location: IP: %2$s, %3$s', home_url(), $ip, join( ', ', IP_API::describe( $location ) ), $user->user_login );
+		if ( ! $this->check_meta( $user->ID, $this->location ) ) {
+			$this->send_notification( $user, $this->location );
+			$message = sprintf( 'Sign-on to %1$s by %4$s from a new location: IP: %2$s, %3$s', home_url(), $this->ip, join( ', ', IP_API::describe( $this->location ) ), $user->user_login );
 			Utils::log( 'wp-location-watcher', LOG_AUTH, LOG_WARNING, $message );
 		}
+	}
+
+	/**
+	 * @param mixed[] $info 
+	 * @return mixed[]
+	 */
+	public function attach_session_information( array $info ): array {
+		if ( false === $this->location ) {
+			$this->location = IP_API::geolocate( $this->ip );
+		}
+
+		if ( $this->location ) {
+			$info['Location'] = join( ', ', IP_API::describe( $this->location ) );
+		}
+
+		return $info;
 	}
 
 	/**
@@ -82,9 +105,8 @@ final class Location_Watcher {
 
 		$blogname = html_entity_decode( get_bloginfo( 'name' ), ENT_QUOTES );
 		$ua       = Utils::get_ua();
-		$ip       = Utils::get_ip();
 		$location = join( ', ', IP_API::describe( $location ) );
-		$location = (string) apply_filters( 'psb_lw_location', $location, $ip );
+		$location = (string) apply_filters( 'psb_lw_location', $location, $this->ip );
 
 		// translators: 1: site name; 2: user display name
 		$subject = sprintf( __( '[%1$s] SECURITY: %2$s has logged in from a new location', 'secenh' ), $blogname, $user->display_name );
@@ -107,7 +129,7 @@ Browser User Agent: %6$s', 'secenh' );
 			$user->display_name,
 			home_url(),
 			$user->user_login,
-			(string) $ip,
+			$this->ip,
 			$location,
 			$ua
 		);
