@@ -41,12 +41,14 @@ final class Location_Watcher {
 
 		$location = IP_API::geolocate( $ip );
 		if ( ! $location ) {
+			$message = sprintf( 'Sign-on to %1$s by %3$s from an unknown new location: IP: %2$s', home_url(), $ip, $user->user_login );
+			Utils::log( 'wp-location-watcher', LOG_AUTH, LOG_WARNING, $message );
 			return;
 		}
 
 		if ( ! $this->check_meta( $user->ID, $location ) ) {
 			$this->send_notification( $user, $location );
-			$message = sprintf( 'Sign-on to %1$s from a new location: IP: %2$s, %3$s', home_url(), $ip, join( ', ', IP_API::describe( $location ) ) );
+			$message = sprintf( 'Sign-on to %1$s by %4$s from a new location: IP: %2$s, %3$s', home_url(), $ip, join( ', ', IP_API::describe( $location ) ), $user->user_login );
 			Utils::log( 'wp-location-watcher', LOG_AUTH, LOG_WARNING, $message );
 		}
 	}
@@ -74,7 +76,7 @@ final class Location_Watcher {
 	 * @psalm-param GeolocateResponse $location
 	 */
 	private function send_notification( WP_User $user, array $location ): void {
-		if ( false === apply_filters( 'psb_dw_send_notification', true ) ) {
+		if ( false === apply_filters( 'psb_lw_send_notification', true ) ) {
 			return;
 		}
 
