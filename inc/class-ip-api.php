@@ -24,7 +24,7 @@ abstract class IP_API {
 			return self::decode_entry( $json );
 		}
 
-		return null;
+		return $response;
 	}
 
 	/**
