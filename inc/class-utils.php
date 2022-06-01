@@ -43,12 +43,11 @@ abstract class Utils {
 	}
 
 	public static function log( string $prefix, int $facility, int $priority, string $message ): void {
-		if ( 'Windows' === PHP_OS_FAMILY ) {
-			$facility = LOG_USER;
-		}
-
-		openlog( $prefix, LOG_PERROR | LOG_PID, $facility );
+		// phpcs:ignore WordPress.PHP.YodaConditions.NotYoda -- false positive
+		openlog( $prefix, LOG_PERROR | LOG_PID, 'Windows' === PHP_OS_FAMILY ? LOG_USER : $facility );
 		syslog( $priority, $message );
 		closelog();
+
+		do_action( 'secenh_log', $message, $prefix, $facility, $priority );
 	}
 }
