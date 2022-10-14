@@ -10,15 +10,14 @@ abstract class Utils {
 	}
 
 	/**
-	 * @param null|string $fallback 
-	 * @return null|string 
+	 * @param null|string $fallback
+	 * @return null|string
 	 * @psalm-template T of string|null
 	 * @psalm-param T $fallback
 	 * @psalm-return string|T
 	 */
 	public static function get_ip( ?string $fallback = null ): ?string {
-		// phpcs:ignore WordPressVIPMinimum.Variables.ServerVariables.UserControlledHeaders, WordPress.Security.ValidatedSanitizedInput.InputNotSanitized
-		$remote_addr = (string) ( $_SERVER['REMOTE_ADDR'] ?? '' );
+		$remote_addr = static::get_server_var_as_string( 'REMOTE_ADDR' );
 		if ( $remote_addr ) {
 			$ip = filter_var( $remote_addr, FILTER_VALIDATE_IP, [ 'options' => [ 'default' => '' ] ] );
 			if ( ! empty( $ip ) && inet_pton( $ip ) !== false ) {
@@ -30,8 +29,12 @@ abstract class Utils {
 	}
 
 	public static function get_server_var( string $key ): string {
+		return wp_unslash( static::get_server_var_as_string( $key ) );
+	}
+
+	private static function get_server_var_as_string( string $key ): string {
 		// phpcs:ignore WordPressVIPMinimum.Variables, WordPress.Security
-		return wp_unslash( (string) ( $_SERVER[ $key ] ?? '' ) );
+		return isset( $_SERVER[ $key ] ) && is_scalar( $_SERVER[ $key ] ) ? (string) $_SERVER[ $key ] : '';
 	}
 
 	public static function get_ua(): string {
