@@ -92,6 +92,7 @@ final class Login_Limiter {
 		if ( 'POST' === Utils::get_request_method() && ! empty( $_POST['log'] ) && is_scalar( $_POST['log'] ) ) {
 			$ip = Utils::get_ip();
 			if ( $ip ) {
+				/** @psalm-suppress RedundantCast */
 				$username = sanitize_user( wp_unslash( (string) $_POST['log'] ) );
 				$limited  = $this->check_limits( $username, $ip );
 				if ( is_wp_error( $limited ) ) {
