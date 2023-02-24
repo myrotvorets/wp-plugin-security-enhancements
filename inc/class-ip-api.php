@@ -148,7 +148,7 @@ abstract class IP_API {
 				'as'      => $entry['as'] ?? '',
 				'mobile'  => isset( $entry['mobile'] ) ? (bool) $entry['mobile'] : null,
 				'proxy'   => isset( $entry['proxy'] ) ? (bool) $entry['proxy'] : null,
-				'hosting' => isset( $entry['hosting'] ) ? (bool) $entry['proxy'] : null,
+				'hosting' => isset( $entry['hosting'] ) ? (bool) $entry['hosting'] : null,
 			];
 
 			$key = self::get_cache_key( $data['ip'] );

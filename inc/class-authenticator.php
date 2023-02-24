@@ -24,7 +24,6 @@ final class Authenticator {
 	 *                                        WP_Error or null otherwise.
 	 * @param string                $username Username or email address.
 	 * @return null|WP_User|WP_Error
-	 * @psalm-suppress RedundantCastGivenDocblockType
 	 */
 	public function authenticate( $user, $username ) {
 		if ( ! is_wp_error( $user ) ) {
@@ -49,8 +48,7 @@ final class Authenticator {
 
 	/**
 	 * @param string $error Login error message.
-	 * @return string 
-	 * @psalm-suppress RedundantCastGivenDocblockType
+	 * @return string
 	 */
 	public function login_errors( $error ): string {
 		global $errors;

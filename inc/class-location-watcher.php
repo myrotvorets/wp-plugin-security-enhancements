@@ -61,7 +61,7 @@ final class Location_Watcher {
 	}
 
 	/**
-	 * @param mixed[] $info 
+	 * @param mixed[] $info
 	 * @return mixed[]
 	 */
 	public function attach_session_information( array $info ): array {

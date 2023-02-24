@@ -24,7 +24,6 @@ final class Login_Logger {
 	 *                                        WP_Error or null otherwise.
 	 * @param string                $username Username or email address.
 	 * @return null|WP_User|WP_Error
-	 * @psalm-suppress RedundantCastGivenDocblockType
 	 */
 	public function authenticate( $user, $username ) {
 		$message = sprintf( 'Login attempt: %s', $this->construct_message( (string) $username ) );
@@ -33,8 +32,7 @@ final class Login_Logger {
 	}
 
 	/**
-	 * @param string $login 
-	 * @psalm-suppress RedundantCastGivenDocblockType
+	 * @param string $login
 	 */
 	public function wp_login( $login ): void {
 		$message = sprintf( 'Login successful: %s', $this->construct_message( (string) $login ) );
@@ -42,8 +40,7 @@ final class Login_Logger {
 	}
 
 	/**
-	 * @param string $login 
-	 * @psalm-suppress RedundantCastGivenDocblockType
+	 * @param string $login
 	 */
 	public function wp_login_failed( $login ): void {
 		$user = Auth_Utils::get_user_by_login_or_email( (string) $login );
