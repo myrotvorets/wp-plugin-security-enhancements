@@ -32,7 +32,6 @@ final class Login_Limiter {
 	public function wp_login_failed( $username_or_email ): void {
 		$ip = Utils::get_ip();
 		if ( $ip ) {
-			/** @psalm-suppress RedundantCastGivenDocblockType */
 			list( $key1, $key2 ) = $this->get_cache_keys( (string) $username_or_email, $ip );
 
 			wp_cache_add( $key1, 0, self::CACHE_GROUP, 10 * MINUTE_IN_SECONDS );
@@ -45,7 +44,6 @@ final class Login_Limiter {
 
 	/**
 	 * @param string $username
-	 * @psalm-suppress RedundantCastGivenDocblockType
 	 */
 	public function wp_login( $username ): void {
 		$ip = Utils::get_ip();
@@ -70,7 +68,6 @@ final class Login_Limiter {
 	 * @param string                $username Username or email address.
 	 * @param string                $password User password
 	 * @return null|WP_User|WP_Error
-	 * @psalm-suppress RedundantCastGivenDocblockType
 	 */
 	public function authenticate( $user, $username, $password ) {
 		if ( ! empty( $username ) && ! empty( $password ) ) {
@@ -92,7 +89,6 @@ final class Login_Limiter {
 		if ( 'POST' === Utils::get_request_method() && ! empty( $_POST['log'] ) && is_scalar( $_POST['log'] ) ) {
 			$ip = Utils::get_ip();
 			if ( $ip ) {
-				/** @psalm-suppress RedundantCast */
 				$username = sanitize_user( wp_unslash( (string) $_POST['log'] ) );
 				$limited  = $this->check_limits( $username, $ip );
 				if ( is_wp_error( $limited ) ) {
