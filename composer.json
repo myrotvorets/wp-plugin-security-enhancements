@@ -17,7 +17,7 @@
 		"wildwolf/wp-request-context": "^1.0"
 	},
 	"require-dev": {
-		"automattic/vipwpcs": "^2.3",
+		"automattic/vipwpcs": "^3.0",
 		"johnpbloch/wordpress-core": "^6.0",
 		"php-stubs/wordpress-stubs": "^5.5 || ^6.0",
 		"php-stubs/wp-cli-stubs": "^2.6",
