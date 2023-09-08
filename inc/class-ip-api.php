@@ -78,7 +78,7 @@ abstract class IP_API {
 			return [];
 		}
 
-		$yes_no_maybe = static function( ?bool $param ): string {
+		$yes_no_maybe = static function ( ?bool $param ): string {
 			if ( null === $param ) {
 				return __( 'N/A', 'secenh' );
 			}
