@@ -48,7 +48,7 @@ abstract class IP_API {
 		if ( ! empty( $ips ) ) {
 			$endpoint = 'http://ip-api.com/batch?fields=17034779';
 			$params   = [
-				'body'        => wp_json_encode( array_values( $ips ) ),
+				'body'        => (string) wp_json_encode( array_values( $ips ) ),
 				'headers'     => [ 'Content-Type: application/json' ],
 				'redirection' => 0,
 			];
@@ -112,6 +112,27 @@ abstract class IP_API {
 		return sprintf( 'ip:%s', strtolower( $ip ) );
 	}
 
+	/**
+	 * @psalm-param array{
+	 *   method?: string,
+	 *   timeout?: float,
+	 *   redirection?: int,
+	 *   httpversion?: string,
+	 *   user-agent?: string,
+	 *   reject_unsafe_urls?: bool,
+	 *   blocking?: bool,
+	 *   headers?: string|array,
+	 *   cookies?: array,
+	 *   body?: string|array,
+	 *   compress?: bool,
+	 *   decompress?: bool,
+	 *   sslverify?: bool,
+	 *   sslcertificates?: string,
+	 *   stream?: bool,
+	 *   filename?: string,
+	 *   limit_response_size?: int,
+	 * } $params
+	 */
 	private static function make_request( string $endpoint, array $params ): ?array {
 		$response = wp_remote_post( $endpoint, $params ); // phpcs:ignore WordPressVIPMinimum.Functions.RestrictedFunctions.wp_remote_get_wp_remote_get
 

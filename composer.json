@@ -24,8 +24,7 @@
 		"phpcompatibility/phpcompatibility-wp": "^2.1",
 		"psalm/plugin-phpunit": "^0.18.0",
 		"vimeo/psalm": "^5.0",
-		"wp-cli/wp-cli": "^2.6",
-		"wp-coding-standards/wpcs": "^2.3"
+		"wp-cli/wp-cli": "^2.6"
 	},
 	"config": {
 		"sort-packages": true,
