@@ -28,6 +28,7 @@ final class Banhammer {
 		header( 'Expires: Sat, 24 Aug 1991 00:00:00 GMT' );
 		header( 'Connection: close' );
 
+		echo 'สีซอให้ควายฟัง', PHP_EOL;
 		if ( function_exists( 'fastcgi_finish_request' ) ) {
 			fastcgi_finish_request();
 		}

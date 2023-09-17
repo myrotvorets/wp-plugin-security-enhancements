@@ -70,7 +70,7 @@ abstract class IP_API {
 	}
 
 	/**
-	 * @psalm-param GeolocateResponse|null $geo 
+	 * @psalm-param GeolocateResponse|null $geo
 	 * @psalm-return string[]
 	 */
 	public static function describe( ?array $geo ): array {
@@ -152,8 +152,8 @@ abstract class IP_API {
 	}
 
 	/**
-	 * @param mixed $entry 
-	 * @psalm-return null|GeolocateResponse 
+	 * @param mixed $entry
+	 * @psalm-return null|GeolocateResponse
 	 */
 	private static function decode_entry( $entry ): ?array {
 		if ( is_array( $entry ) && ! empty( $entry['status'] ) && 'success' === $entry['status'] && ! empty( $entry['query'] ) ) {

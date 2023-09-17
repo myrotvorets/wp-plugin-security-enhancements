@@ -16,5 +16,6 @@ class SecEnh_Command {
 
 		SecEnh_IPAPI_Command::register();
 		SecEnh_Ban_Command::register();
+		SecEnh_Is_Banned_Command::register();
 	}
 }
