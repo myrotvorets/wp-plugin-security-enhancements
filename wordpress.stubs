@@ -11,6 +11,8 @@ namespace {
 	define( 'COOKIEPATH', expr );
 	define( 'COOKIE_DOMAIN', expr );
 
+	define( 'ABSPATH', '/wp' );
+
 	/**
 	 * Adds slashes to a string or recursively adds slashes to strings within an array.
 	 *
