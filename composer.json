@@ -23,7 +23,7 @@
 		"php-stubs/wp-cli-stubs": "^2.9.0",
 		"phpcompatibility/phpcompatibility-wp": "^2.1.4",
 		"psalm/plugin-phpunit": "^0.18.4",
-		"vimeo/psalm": "^5.19.0",
+		"vimeo/psalm": "^5.19.1",
 		"wp-cli/wp-cli": "^2.9.0"
 	},
 	"config": {
