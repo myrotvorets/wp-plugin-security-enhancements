@@ -26,20 +26,23 @@ final class Authenticator {
 	 * @return null|WP_User|WP_Error
 	 */
 	public function authenticate( $user, $username ) {
+		/** @var WP_Error */
+		static $failure = new WP_Error( 'failure', '<strong>Error</strong>: The credentials provided are incorrect.' );
+
 		if ( ! is_wp_error( $user ) ) {
 			$ra  = Utils::get_ip();
 			$ua  = Utils::get_ua();
 			$acc = Utils::get_server_var( 'HTTP_ACCEPT' );
 			$sua = sanitize_text_field( $ua );
-			if ( empty( $ra ) || empty( $ua ) || empty( $acc ) || $ua !== $sua ) {
-				return new WP_Error( 'failure', '<strong>Error</strong>: The credentials provided are incorrect.' );
+			if ( ! is_null( $ra ) || empty( $ua ) || empty( $acc ) || $ua !== $sua ) {
+				return $failure;
 			}
 		}
 
 		if ( $username ) {
 			$is_restricted_username = Utils::is_restricted_username( (string) $username );
 			if ( $is_restricted_username ) {
-				$user = new WP_Error( 'failure', '<strong>Error</strong>: The credentials provided are incorrect.' );
+				$user = $failure;
 			}
 		}
 

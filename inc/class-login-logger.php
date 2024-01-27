@@ -52,7 +52,7 @@ final class Login_Logger {
 		}
 
 		$ip = Utils::get_ip();
-		if ( $ip ) {
+		if ( null !== $ip ) {
 			$geo = IP_API::describe( IP_API::geolocate( $ip ) );
 			if ( ! empty( $geo ) ) {
 				$message .= ', ' . join( ', ', $geo );

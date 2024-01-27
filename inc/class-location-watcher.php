@@ -23,7 +23,7 @@ final class Location_Watcher {
 
 	public function init(): void {
 		$ip_address = Utils::get_ip();
-		if ( $ip_address ) {
+		if ( null !== $ip_address ) {
 			$this->ip = $ip_address;
 			add_action( 'wp_login', [ $this, 'wp_login' ], 10, 2 );
 			add_filter( 'attach_session_information', [ $this, 'attach_session_information' ] );
