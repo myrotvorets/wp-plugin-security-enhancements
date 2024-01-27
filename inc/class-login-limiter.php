@@ -31,7 +31,7 @@ final class Login_Limiter {
 	 */
 	public function wp_login_failed( $username_or_email ): void {
 		$ip = Utils::get_ip();
-		if ( $ip ) {
+		if ( null !== $ip ) {
 			list( $key1, $key2 ) = $this->get_cache_keys( (string) $username_or_email, $ip );
 
 			wp_cache_add( $key1, 0, self::CACHE_GROUP, 10 * MINUTE_IN_SECONDS );
@@ -47,7 +47,7 @@ final class Login_Limiter {
 	 */
 	public function wp_login( $username ): void {
 		$ip = Utils::get_ip();
-		if ( $ip ) {
+		if ( null !== $ip ) {
 			list( $key1, $key2 ) = $this->get_cache_keys( (string) $username, $ip );
 
 			$val = wp_cache_decr( $key1, 1, self::CACHE_GROUP );
@@ -73,7 +73,7 @@ final class Login_Limiter {
 		if ( ! empty( $username ) && ! empty( $password ) ) {
 			$ip = Utils::get_ip();
 
-			if ( $ip ) {
+			if ( null !== $ip ) {
 				$limited = $this->check_limits( (string) $username, $ip );
 				if ( is_wp_error( $limited ) ) {
 					return $limited;
@@ -85,10 +85,11 @@ final class Login_Limiter {
 	}
 
 	public function login_form_login(): void {
+		/** @psalm-suppress RiskyTruthyFalsyComparison */
 		// phpcs:disable WordPress.Security.NonceVerification.Missing
 		if ( 'POST' === Utils::get_request_method() && ! empty( $_POST['log'] ) && is_scalar( $_POST['log'] ) ) {
 			$ip = Utils::get_ip();
-			if ( $ip ) {
+			if ( null !== $ip ) {
 				$username = sanitize_user( wp_unslash( (string) $_POST['log'] ) );
 				$limited  = $this->check_limits( $username, $ip );
 				if ( is_wp_error( $limited ) ) {
@@ -145,7 +146,7 @@ final class Login_Limiter {
 		$uri  = Utils::get_server_var( 'REQUEST_URI' );
 
 		$message = sprintf( 'site: %1$s, IP: %2$s, UA: %3$s, URI: %4$s', $site, $ip ?? '<unknown IP>', $ua, $uri );
-		if ( $ip ) {
+		if ( null !== $ip ) {
 			$geo = IP_API::describe( IP_API::geolocate( $ip ) );
 			if ( ! empty( $geo ) ) {
 				$message .= ', ' . join( ', ', $geo );

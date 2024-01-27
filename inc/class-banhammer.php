@@ -135,7 +135,7 @@ final class Banhammer {
 		$ips = [];
 
 		$ip = Utils::get_ip();
-		if ( $ip && filter_var( $ip, FILTER_VALIDATE_IP, FILTER_FLAG_NO_PRIV_RANGE | FILTER_FLAG_NO_RES_RANGE ) ) {
+		if ( null !== $ip && filter_var( $ip, FILTER_VALIDATE_IP, FILTER_FLAG_NO_PRIV_RANGE | FILTER_FLAG_NO_RES_RANGE ) ) {
 			$ips[ $ip ] = 'IP';
 		}
 
@@ -156,7 +156,7 @@ final class Banhammer {
 
 		$forwarded = Utils::get_server_var( 'HTTP_X_FORWARDED' );
 		$matches   = [];
-		preg_match_all( '/for\\s*=\\s*((?:"[^"]++")|[^,;\s]+)/i', $forwarded, $matches );
+		preg_match_all( '/for\\s*=\\s*("[^"]++"|[^,;\s]+)/i', $forwarded, $matches );
 		if ( ! empty( $matches[1] ) ) {
 			foreach ( $matches[1] as $ip ) {
 				if ( $ip ) {

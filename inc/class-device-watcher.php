@@ -105,7 +105,7 @@ final class Device_Watcher {
 		$ua       = Utils::get_ua();
 		$ip       = Utils::get_ip();
 
-		if ( $ip ) {
+		if ( null !== $ip ) {
 			$location = join( ', ', IP_API::describe( IP_API::geolocate( $ip ) ) );
 		} else {
 			$location = __( 'Unknown location', 'secenh' );
