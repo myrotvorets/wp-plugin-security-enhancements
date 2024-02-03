@@ -9,6 +9,8 @@ use WP_User;
 final class Authenticator {
 	use Singleton;
 
+	private const ECREDENTIALS = '<strong>Error</strong>: The credentials provided are incorrect.';
+
 	private function __construct() {
 		$this->init();
 	}
@@ -27,14 +29,14 @@ final class Authenticator {
 	 */
 	public function authenticate( $user, $username ) {
 		/** @var WP_Error */
-		static $failure = new WP_Error( 'failure', '<strong>Error</strong>: The credentials provided are incorrect.' );
+		static $failure = new WP_Error( 'failure', self::ECREDENTIALS );
 
 		if ( ! is_wp_error( $user ) ) {
 			$ra  = Utils::get_ip();
 			$ua  = Utils::get_ua();
 			$acc = Utils::get_server_var( 'HTTP_ACCEPT' );
 			$sua = sanitize_text_field( $ua );
-			if ( ! is_null( $ra ) || empty( $ua ) || empty( $acc ) || $ua !== $sua ) {
+			if ( null === $ra || empty( $ua ) || empty( $acc ) || $ua !== $sua ) {
 				return $failure;
 			}
 		}
@@ -66,7 +68,7 @@ final class Authenticator {
 		/** @var int|string $code */
 		foreach ( $codes as $code ) {
 			if ( isset( $triggers[ $code ] ) ) {
-				$error = '<strong>Error</strong>: The credentials provided are incorrect.';
+				$error = self::ECREDENTIALS;
 				break;
 			}
 		}
@@ -88,7 +90,7 @@ final class Authenticator {
 		}
 
 		if ( $found ) {
-			$errors->add( 'failure', '<strong>Error</strong>: The credentials provided are incorrect.' );
+			$errors->add( 'failure', self::ECREDENTIALS );
 		}
 
 		return $errors;
