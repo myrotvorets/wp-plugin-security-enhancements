@@ -157,6 +157,7 @@ final class Banhammer {
 		$forwarded = Utils::get_server_var( 'HTTP_X_FORWARDED' );
 		$matches   = [];
 		preg_match_all( '/for\\s*=\\s*("[^"]++"|[^,;\s]+)/i', $forwarded, $matches );
+		/** @psalm-suppress RiskyTruthyFalsyComparison */
 		if ( ! empty( $matches[1] ) ) {
 			foreach ( $matches[1] as $ip ) {
 				if ( $ip ) {
