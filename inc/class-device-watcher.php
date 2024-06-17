@@ -57,7 +57,7 @@ final class Device_Watcher {
 
 	private function verify_cookie( string $expected_hash ): bool {
 		// phpcs:ignore WordPressVIPMinimum.Variables.RestrictedVariables.cache_constraints___COOKIE
-		return ! empty( $_COOKIE[ self::COOKIE_NAME ] ) && $_COOKIE[ self::COOKIE_NAME ] === $expected_hash;
+		return isset( $_COOKIE[ self::COOKIE_NAME ] ) && $_COOKIE[ self::COOKIE_NAME ] === $expected_hash;
 	}
 
 	private function set_cookie( string $hash ): void {
