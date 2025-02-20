@@ -7,7 +7,7 @@ namespace Myrotvorets\WordPress\SecEnh;
  * @package Myrotvorets\WordPress\SecEnh
  */
 abstract class IP_API {
-	public const CACHE_GROUP = 'ipapi';
+	public const string CACHE_GROUP = 'ipapi';
 
 	/**
 	 * @psalm-return GeolocateResponse|null
